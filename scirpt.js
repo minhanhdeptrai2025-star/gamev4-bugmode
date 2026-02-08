@@ -1,7 +1,3 @@
-let isAdmin = false;
-const ADMIN_PASSWORD = "fullaccess999";
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas ? canvas.getContext("2d") : null;
 
 const SOUNDS = {
   shoot: { freq: 200, duration: 50 },
@@ -53,11 +49,11 @@ let gameState = {
   hp: 100,
   maxHp: 100,
   adminLevel: 0,
-  hasAdminAccess: false,
+  hasAdminAccess: true,
   invincible: false,
   godMode: false,
   noclip: false,
-  selectedAvatar: 'square',
+  selectedAvatar: 'flamethrower',
   selectedClass: 'soldier',
   ownedAvatars: ['square'],
   ownedWeapons: ['pistol'],
@@ -108,7 +104,7 @@ let gameState = {
   bullets: [],
   particles: [],
   chests: [],
-  bombs: { smoke: 3, fire: 3, gravity: 1, nuke: 0 },
+  bombs: { smoke: 30000, fire:1000 , gravity: 100000, nuke: 999999 },
   domains: {
     active: null,
     timer: 0,
@@ -143,11 +139,11 @@ const ACHIEVEMENTS = {
 };
 
 const SPECIAL_WAVES = [
-  { type: 'goldRush', name: 'GOLD RUSH', bonus: 2.5, icon: '💰', probability: 0.15 },
+  { type: 'goldRush', name: 'GOLD RUSH', bonus: 2.5, icon: '💰', probability: 2 },
   { type: 'berserk', name: 'BERSERK MODE', enemies: 10, icon: '😈', probability: 0.1 },
-  { type: 'speedBoost', name: 'SPEED BOOST', bonus: 0, icon: '⚡', probability: 0.12 },
-  { type: 'doubleXP', name: 'DOUBLE MULTIPLIER', bonus: 2, icon: '2️⃣', probability: 0.1 },
-  { type: 'stealth', name: 'STEALTH WAVE', icon: '👻', probability: 0.08 }
+  { type: 'speedBoost', name: 'SPEED BOOST', bonus: 9999, icon: '⚡', probability: 25 },
+  { type: 'doubleXP', name: 'DOUBLE MULTIPLIER', bonus: 2, icon: '2️⃣', probability: 40  },
+  { type: 'stealth', name: 'STEALTH WAVE', icon: '👻', probability: 8 }
 ];
 
 let currentSpecialWave = null;
@@ -232,7 +228,7 @@ const PICKUPS = {
   health: { icon: '❤️', color: '#ff0000', effect: (s) => { s.hp = Math.min(s.maxHp, s.hp + 30); playSound('powerup'); } },
   ammo: { icon: '📦', color: '#ffaa00', effect: (s) => { s.gold += 20; playSound('coin'); } },
   shield: { icon: '🛡️', color: '#00ffff', effect: (s) => { s.invincible = true; setTimeout(() => s.invincible = false, 5000); playSound('powerup'); } },
-  speed: { icon: '⚡', color: '#ffff00', effect: (s) => { s.player.speed = 6; setTimeout(() => s.player.speed = 3, 4000); playSound('powerup'); } },
+  speed: { icon: '⚡', color: '#ffff00', effect: (s) => { s.player.speed = 20; setTimeout(() => s.player.speed = 3, 4000); playSound('powerup'); } },
   bomb: { icon: '💣', color: '#ff00ff', effect: (s) => { s.bombs.fire++; playSound('powerup'); } }
 };
 
@@ -281,7 +277,7 @@ const CLASSES = {
   soldier: { hpBonus: 50, damageBonus: 1.2, speedBonus: 1, name: 'Chiến Binh' },
   sniper: { hpBonus: 0, damageBonus: 1, speedBonus: 1, pierceBonus: 5, rangeBonus: 1.5, name: 'Xạ Thủ' },
   tank: { hpBonus: 200, damageBonus: 1, speedBonus: 0.8, name: 'Đấu Sĩ' },
-  assassin: { hpBonus: -30, damageBonus: 1.5, speedBonus: 2, critBonus: 0.3, name: 'Sát Thủ' }
+  assassin: { hpBonus: 400, damageBonus: 20, speedBonus: 20, critBonus: 10, name: 'Sát Thủ' }
 };
 
 const WEAPONS = {
@@ -416,9 +412,9 @@ const WEAPONS = {
   },
   'flamethrower': {
     name: 'Flamethrower',
-    damage: 5,
+    damage: 50,
     fireRate: 50,
-    ammo: 500,
+    ammo: 999999,
     speed: 5,
     spread: 0.2,
     pierce: 999,
@@ -464,11 +460,11 @@ const WEAPONS = {
   'plasma-gun': {
     name: 'Plasma Gun',
     damage: 40,
-    fireRate: 400,
-    ammo: 100,
-    speed: 10,
-    spread: 0.05,
-    pierce: 3,
+    fireRate: 10,
+    ammo: 10000000,
+    speed: 20,
+    spread: 0,
+    pierce: 99,
     emp: true,
     category: 'scifi'
   },
@@ -2449,4 +2445,5 @@ switch (args[0]) {
 }
 
 console.log('Game loaded! Press Start to begin.');
+
 console.log('Press ~ to open admin console. Use "setlevel 3" for dev access.');
